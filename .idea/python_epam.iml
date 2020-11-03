@@ -10,6 +10,10 @@
       <sourceFolder url="file://$MODULE_DIR$/venv/homework1/sample_project/tests" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/venv/homework1/task3/maxmin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/venv/homework1/task3/tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/venv/homework1/task5" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/venv/homework1/task2" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/venv/homework1/task5/max_subarr" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/venv/homework1/task5/tests" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.9 (python_epam)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

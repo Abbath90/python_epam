@@ -1,4 +1,6 @@
 pytest
 pytest-sugar
+pytest-mock
 black
 isort
+pre-commit
