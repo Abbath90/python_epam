@@ -22,16 +22,3 @@ def check_sum_of_four(a: List[int], b: List[int], c: List[int], d: List[int]) ->
             if (i + j) == 0:
                 counter += 1
     return counter
-
-
-"""a = [0, 2, 4]
-b = [6, 8, 10]
-c = [-6, -10, -12]
-d = [-0, -16, -18]"""
-
-a = [0]
-b = [0]
-c = [0]
-d = [0]
-
-print(check_sum_of_four(a, b, c, d))
