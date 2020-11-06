@@ -2,7 +2,7 @@ import os.path
 from typing import Tuple
 
 import pytest
-from task3.maxmin import find_maximum_and_minimum
+from homework1.task3.maxmin import find_maximum_and_minimum
 
 path_to_test_stuff = "./homework1/tests/test_stuff/"
 
