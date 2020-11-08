@@ -11,8 +11,21 @@ Example 2:
 Input: [2,2,1,1,1,2,2]
 Output: 2, 1
 """
-from typing import List, Tuple
+from typing import Dict, List, Tuple
+
+
+def get_key_by_value(inp_dic: Dict, value: int):
+    for i in inp_dic.items():
+        if i[1] == value:
+            return i[0]
 
 
 def major_and_minor_elem(inp: List) -> Tuple[int, int]:
-    pass
+    dict_of_elems = {}
+    for i in inp:
+        dict_of_elems[i] = dict_of_elems.get(i, 0)
+        dict_of_elems[i] += 1
+    list_of_values = list(dict_of_elems.values())
+    major_value = get_key_by_value(dict_of_elems, max(list_of_values))
+    minor_value = get_key_by_value(dict_of_elems, min(list_of_values))
+    return (major_value, minor_value)
