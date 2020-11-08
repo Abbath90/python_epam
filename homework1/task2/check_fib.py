@@ -12,11 +12,10 @@ def _check_window(x: int, y: int, z: int) -> bool:
 
 
 def check_fibonacci(data: Sequence[int]) -> bool:
+    assert len(data) >= 3
     l = len(data)
-    if not l >= 3:
-        return False
     for i, j in enumerate(data):
         if i == l - 2:
-            return True
+            return None
         if not _check_window(data[i], data[i + 1], data[i + 2]):
-            return False
+            raise ValueError("Invalid data")

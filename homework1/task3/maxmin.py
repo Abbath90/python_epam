@@ -12,17 +12,24 @@ with open("some_file.txt") as fi:
 from typing import List, Tuple
 
 
+def sort_short_list(list: List[int]) -> List[int]:
+    if len(list) > 1 and (list[0] < list[1]):
+        list[0], list[1] = list[1], list[0]
+    if len(list) > 2 and (list[1] < list[2]):
+        list[1], list[2] = list[2], list[1]
+        if list[0] < list[1]:
+            list[0], list[1] = list[1], list[0]
+    return list
+
+
 def find_maximum_and_minimum(file_name: str) -> Tuple[int, int]:
+    list_from_file = []
     with open(file_name) as fi:
-        min = int(next(fi))
-        try:
-            max = int(next(fi))
-        except StopIteration:
-            max = min
         for line in fi:
-            next_line = int(line)
-            if next_line < min:
-                min = next_line
-            elif next_line > max:
-                max = next_line
-        return (max, min)
+            list_from_file.append(int(line))
+            list_from_file = sort_short_list(list_from_file)
+            if len(list_from_file) == 3:
+                list_from_file = list_from_file[::2]
+    if len(list_from_file) == 1:
+        list_from_file.append(list_from_file[0])
+    return tuple(list_from_file)
