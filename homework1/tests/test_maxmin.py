@@ -2,6 +2,7 @@ import os.path
 from typing import Tuple
 
 import pytest
+
 from homework1.task3.maxmin import find_maximum_and_minimum
 
 
