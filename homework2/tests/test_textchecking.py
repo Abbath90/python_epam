@@ -35,5 +35,5 @@ def test_text_checking(
     data: str, expected_result: Tuple[List[str], str, int, int, str]
 ):
     actual_result = text_checking(data)
-
+зк
     assert actual_result == expected_result
