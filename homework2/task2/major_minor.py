@@ -12,20 +12,13 @@ Input: [2,2,1,1,1,2,2]
 Output: 2, 1
 """
 from typing import Dict, List, Tuple
-
-
-def get_key_by_value(inp_dic: Dict, value: int):
-    for i in inp_dic.items():
-        if i[1] == value:
-            return i[0]
+from collections import defaultdict
 
 
 def major_and_minor_elem(inp: List) -> Tuple[int, int]:
-    dict_of_elems = {}
+    dict_of_elems = defaultdict(int)
     for i in inp:
-        dict_of_elems[i] = dict_of_elems.get(i, 0)
         dict_of_elems[i] += 1
-    list_of_values = list(dict_of_elems.values())
-    major_value = get_key_by_value(dict_of_elems, max(list_of_values))
-    minor_value = get_key_by_value(dict_of_elems, min(list_of_values))
+    major_value = max(dict_of_elems, key=dict_of_elems.get)
+    minor_value = min(dict_of_elems, key=dict_of_elems.get)
     return (major_value, minor_value)

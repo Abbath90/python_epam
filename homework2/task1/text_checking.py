@@ -9,80 +9,73 @@ Given a file containing text. Complete using only default collections:
 from typing import Dict, List, Tuple
 
 
-def get_key_by_value(inp_dic: Dict, value: int) -> any:
-    for i in inp_dic.items():
-        if i[1] == value:
-            return i[0]
-
-
-def text_checking(file_name: str) -> Tuple[List[str], str, int, int, str]:
-    chars_dict = {}
+def get_longest_diverse_words(file_name: str) -> List[str]:
+    output_list = []
     words_dict = {}
-    non_ascii_dict = {}
     punctuation = """!?.,"'"<>«»:;{}[]()#$%^&*-+=/`~"""
-    ascii_num_set = list(range(128))
     with open(file_name, encoding="unicode-escape", errors="replace") as fi:
         for line in fi:
             for word in line.lower().rstrip("\n").split(" "):
-                for char in word:
-                    if char in chars_dict:
-                        chars_dict[char] += 1
-                        if not ord(char) in ascii_num_set:
-                            non_ascii_dict[char] += 1
-                    else:
-                        chars_dict[char] = 1
-                        if not ord(char) in ascii_num_set:
-                            non_ascii_dict[char] = 1
                 translator = str.maketrans("", "", punctuation)
                 word = word.translate(translator)
                 if word in words_dict:
                     words_dict[word] += 1
                 else:
                     words_dict[word] = 1
-
-    longest_diverse_words = get_longest_diverse_words(words_dict)
-    rarest_char = get_rarest_char(chars_dict)
-    punctuation_chars = count_punctuation_chars(chars_dict)
-    non_ascii_chars = count_non_ascii_chars(non_ascii_dict)
-    most_common_non_ascii_char = get_most_common_non_ascii_char(non_ascii_dict)
-
-    return (
-        longest_diverse_words,
-        rarest_char,
-        punctuation_chars,
-        non_ascii_chars,
-        most_common_non_ascii_char,
-    )
-
-
-def get_longest_diverse_words(words_dict: Dict[str, str]) -> List[str]:
-    output_list = []
     for word in words_dict:
-        if len(list(word)) == len(set(word)):
+        if len(word) == len(set(word)):
             output_list.append(word)
     output_list.sort(key=len)
     return output_list[-10:]
 
 
-def get_rarest_char(chars_dict: Dict[str, str]) -> str:
-    min_value_in_dict = min(chars_dict.values())
+def get_rarest_char(file_name: str) -> str:
+    chars_dict = {}
+    with open(file_name, encoding="unicode-escape", errors="replace") as fi:
+        for line in fi:
+            for word in line.lower().rstrip("\n").split(" "):
+                for char in word:
+                    if char in chars_dict:
+                        chars_dict[char] += 1
+                    else:
+                        chars_dict[char] = 1
 
-    return get_key_by_value(chars_dict, min_value_in_dict)
+    return min(chars_dict, key=chars_dict.get)
 
 
-def count_punctuation_chars(chars_dict: Dict[str, str]) -> int:
+def count_punctuation_chars(file_name: str) -> int:
     punctuation = """!?.,"'"<>«»:;{}[]()#$%^&*-+=/`~"""
     counter = 0
-    for i in chars_dict.keys():
-        if i in punctuation:
-            counter += chars_dict[i]
+    with open(file_name, encoding="unicode-escape", errors="replace") as fi:
+        for line in fi:
+            for word in line.lower().rstrip("\n").split(" "):
+                for char in word:
+                    if char in punctuation:
+                        counter += 1
     return counter
 
 
-def count_non_ascii_chars(non_ascii_dict: Dict[str, str]) -> int:
-    return sum((non_ascii_dict.values()))
+def count_non_ascii_chars(file_name: str) -> int:
+    ascii_num_set = list(range(128))
+    counter = 0
+    with open(file_name, encoding="unicode-escape", errors="replace") as fi:
+        for line in fi:
+            for word in line.lower().rstrip("\n").split(" "):
+                for char in word:
+                    if not ord(char) in ascii_num_set:
+                        counter += 1
+    return counter
 
 
-def get_most_common_non_ascii_char(non_ascii_dict: Dict[str, str]) -> str:
-    max_value_in_dict = max(non_ascii_dict.values())
-    return get_key_by_value(non_ascii_dict, max_value_in_dict)
+def get_most_common_non_ascii_char(file_name: str) -> str:
+    non_ascii_dict = {}
+    ascii_num_set = list(range(128))
+    with open(file_name, encoding="unicode-escape", errors="replace") as fi:
+        for line in fi:
+            for word in line.lower().rstrip("\n").split(" "):
+                for char in word:
+                    if char in non_ascii_dict and not ord(char) in ascii_num_set:
+                        non_ascii_dict[char] += 1
+                    elif char not in non_ascii_dict and not ord(char) in ascii_num_set:
+                        non_ascii_dict[char] = 1
+    return max(non_ascii_dict, key=non_ascii_dict.get)
