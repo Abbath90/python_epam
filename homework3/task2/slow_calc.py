@@ -15,18 +15,18 @@ Calculation time should not take more than a minute.
 Use functional capabilities of multiprocessing module.
 You are not allowed to modify slow_calculate function.'''
 
-import time
-import struct
-import random
 import hashlib
+import random
+import struct
+import time
 from multiprocessing import Process
 
 
 def slow_calculate(value):
     """Some weird voodoo magic calculations"""
-    time.sleep(random.randint(1,3))
+    time.sleep(random.randint(1, 3))
     data = hashlib.md5(str(value).encode()).digest()
-    return sum(struct.unpack('<' + 'B' * len(data), data))
+    return sum(struct.unpack("<" + "B" * len(data), data))
 
 
 def slow_sum():
@@ -37,5 +37,5 @@ def slow_sum():
         p.start()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     slow_sum()
