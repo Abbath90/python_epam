@@ -1,4 +1,4 @@
-'''
+"""
 In previous homework task 4, you wrote a cache function that remembers other function output value.
 Modify it to be a parametrized decorator, so that the following code:
 
@@ -21,40 +21,11 @@ f()     # but use it up to two times only
 f()
 ? 2
 '2'
-'''
+"""
 
 
 from collections.abc import Callable
-
-
-'''def decor_cache(times):
-    times = 0
-    def cache(func: Callable) -> Callable:
-        input_cache = {}
-
-        def cache_func(*args):
-                if args in input_cache:
-                    if times > 0:
-                        times -= 1
-                        return input_cache[args]
-                else:
-                    result = func(*args)
-                    input_cache[args] = result
-                    return result
-
-        return cache_func
-    return cache
-
-@decor_cache(times = 3)
-def f():
-    print('Hey')
-    return input('? ')
-
-f()
-f()
-f()
-f()
-'''
+from functools import wraps
 
 
 def cache(size_limit=0):
@@ -62,7 +33,9 @@ def cache(size_limit=0):
         input_cache = {}
         counter = 0
 
+        @wraps(func)
         def wrapper(*args):
+            nonlocal counter
             if args in input_cache and size_limit > counter:
                 counter += 1
                 return input_cache[args]
@@ -74,14 +47,10 @@ def cache(size_limit=0):
                 return result
 
         return wrapper
+
     return decorator
 
-@cache(size_limit = 3)
-def f():
-    return input('? ')
 
-f()
-f()
-f()
-f()
-f()
+@cache(size_limit=2)
+def f():
+    return input("? ")

@@ -19,4 +19,3 @@ def is_armstrong(number: int) -> bool:
         return True
     else:
         return False
-
