@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import List
 
 import pytest
 
@@ -17,16 +17,16 @@ from homework2.task1.text_checking import (
         (
             "./homework2/tests/test_stuff/data.txt",
             [
-                "rückständig",
-                "schlagworte",
-                "schwerpunkt",
-                "moralischen",
-                "zukünftiges",
-                "landstriche",
-                "praktischen",
-                "erstaunlich",
-                "verständlich",
-                "kalyptischen",
+                "erquickt",
+                "wichtigsten",
+                "gewünschten",
+                "monopolistisch",
+                "darzustellen",
+                "leidenschaftlich",
+                "beschäftigen",
+                "fingerabdrucks",
+                "friedensabstimmung",
+                "unmißverständliche",
             ],
         ),
     ],

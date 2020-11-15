@@ -6,39 +6,37 @@ Given a file containing text. Complete using only default collections:
     4) Count every non ascii char
     5) Find most common non ascii char for document
 """
-from typing import Dict, List, Tuple
+from collections import defaultdict
+from typing import List
 
 
 def get_longest_diverse_words(file_name: str) -> List[str]:
     output_list = []
-    words_dict = {}
     punctuation = """!?.,"'"<>«»:;{}[]()#$%^&*-+=/`~"""
     with open(file_name, encoding="unicode-escape", errors="replace") as fi:
         for line in fi:
             for word in line.lower().rstrip("\n").split(" "):
                 translator = str.maketrans("", "", punctuation)
                 word = word.translate(translator)
-                if word in words_dict:
-                    words_dict[word] += 1
+                len_unique_symbols = len(set(word))
+                if len(output_list) != 10:
+                    output_list.append(word)
+                    output_list.sort(key=lambda x: len(set(x)))
                 else:
-                    words_dict[word] = 1
-    for word in words_dict:
-        if len(word) == len(set(word)):
-            output_list.append(word)
-    output_list.sort(key=len)
-    return output_list[-10:]
+                    if len_unique_symbols > len(set(output_list[0])):
+                        output_list.append(word)
+                        output_list.pop(0)
+    output_list.sort(key=lambda x: len(set(x)))
+    return output_list
 
 
 def get_rarest_char(file_name: str) -> str:
-    chars_dict = {}
+    chars_dict = defaultdict(int)
     with open(file_name, encoding="unicode-escape", errors="replace") as fi:
         for line in fi:
             for word in line.lower().rstrip("\n").split(" "):
                 for char in word:
-                    if char in chars_dict:
-                        chars_dict[char] += 1
-                    else:
-                        chars_dict[char] = 1
+                    chars_dict[char] += 1
 
     return min(chars_dict, key=chars_dict.get)
 
@@ -68,14 +66,12 @@ def count_non_ascii_chars(file_name: str) -> int:
 
 
 def get_most_common_non_ascii_char(file_name: str) -> str:
-    non_ascii_dict = {}
+    non_ascii_dict = defaultdict(int)
     ascii_num_set = list(range(128))
     with open(file_name, encoding="unicode-escape", errors="replace") as fi:
         for line in fi:
             for word in line.lower().rstrip("\n").split(" "):
                 for char in word:
-                    if char in non_ascii_dict and not ord(char) in ascii_num_set:
+                    if not ord(char) in ascii_num_set:
                         non_ascii_dict[char] += 1
-                    elif char not in non_ascii_dict and not ord(char) in ascii_num_set:
-                        non_ascii_dict[char] = 1
     return max(non_ascii_dict, key=non_ascii_dict.get)

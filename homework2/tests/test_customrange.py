@@ -1,6 +1,6 @@
 from collections.abc import Sequence
 from string import ascii_lowercase
-from typing import List, Tuple
+from typing import List
 
 import pytest
 
