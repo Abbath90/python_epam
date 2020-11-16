@@ -21,13 +21,21 @@ You will learn:
 **** https://docs.python.org/3/tutorial/errors.html#raising-exceptions
 """
 
+import pathlib
+
+
 def read_magic_number(path: str) -> bool:
-    with open(path) as fi:
-        first_line = next(fi)
-        if first_line.isdigit():
-            if int(first_line) in range(1, 4):
-                return True
+    if not path.exists():
+        raise FileNotFoundError("File does not exist")
+    else:
+        with open(path) as fi:
+            first_line = fi.readline()
+            try:
+                number = float(first_line)
+            except Exception:
+                raise ValueError("Must be a number")
             else:
-                return False
-        else:
-            raise ValueError("Must be int")
+                if number >= 1 and number < 3:
+                    return True
+                else:
+                    return False
