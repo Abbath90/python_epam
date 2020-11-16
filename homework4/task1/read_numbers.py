@@ -21,6 +21,13 @@ You will learn:
 **** https://docs.python.org/3/tutorial/errors.html#raising-exceptions
 """
 
-
 def read_magic_number(path: str) -> bool:
-    ...
+    with open(path) as fi:
+        first_line = next(fi)
+        if first_line.isdigit():
+            if int(first_line) in range(1, 4):
+                return True
+            else:
+                return False
+        else:
+            raise ValueError("Must be int")
