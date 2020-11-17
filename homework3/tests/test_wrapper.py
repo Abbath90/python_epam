@@ -1,5 +1,6 @@
-from homework3.task1.cache_wrapper import cache
 from io import StringIO
+
+from homework3.task1.cache_wrapper import cache
 
 
 @cache(size_limit=2)

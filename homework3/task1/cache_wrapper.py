@@ -34,7 +34,7 @@ def cache(size_limit: int) -> Callable:
         result = None
 
         @wraps(func)
-        def wrapped(*args, **kwargs ):
+        def wrapped(*args, **kwargs):
             nonlocal counter, result
             if counter > 0:
                 counter -= 1
@@ -44,8 +44,6 @@ def cache(size_limit: int) -> Callable:
                 counter = size_limit
                 return result
 
-
         return wrapped
 
     return wrapper
-
