@@ -19,17 +19,14 @@ def get_longest_diverse_words(file_name: str) -> List[str]:
                 translator = str.maketrans("", "", punctuation)
                 word = word.translate(translator)
                 len_unique_symbols = len(set(word))
-                if len(output_list) != 10 and word not in output_list:
+                if len(output_list) != 10:
                     output_list.append(word)
                     output_list.sort(key=lambda x: len(set(x)))
                 else:
-                    if (
-                        len_unique_symbols > len(set(output_list[0]))
-                        and word not in output_list
-                    ):
+                    if len_unique_symbols > len(set(output_list[0])):
                         output_list.append(word)
                         output_list.pop(0)
-                        output_list.sort(key=lambda x: len(set(x)))
+    output_list.sort(key=lambda x: len(set(x)))
     return output_list
 
 
