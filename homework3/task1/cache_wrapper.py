@@ -28,29 +28,23 @@ from collections.abc import Callable
 from functools import wraps
 
 
-def cache(size_limit=0):
-    def decorator(func):
-        input_cache = {}
+def cache(size_limit: int) -> Callable:
+    def wrapper(func: Callable):
         counter = 0
+        result = None
 
         @wraps(func)
-        def wrapper(*args):
-            nonlocal counter
-            if args in input_cache and size_limit > counter:
-                counter += 1
-                return input_cache[args]
+        def wrapped(*args, **kwargs ):
+            nonlocal counter, result
+            if counter > 0:
+                counter -= 1
+                return result
             else:
-                input_cache.clear()
-                counter = 0
-                result = func(*args)
-                input_cache[args] = result
+                result = func(*args, **kwargs)
+                counter = size_limit
                 return result
 
-        return wrapper
 
-    return decorator
+        return wrapped
 
-
-@cache(size_limit=2)
-def f():
-    return input("? ")
+    return wrapper
