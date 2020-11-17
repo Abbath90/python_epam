@@ -18,7 +18,14 @@ You will learn:
 59
 * https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen
 """
+import urllib.request
 
 
-def count_dots_on_i(url: str) -> int:
-    ...
+def count_dots_on_i() -> int:
+    req = urllib.request.urlopen('https://www.google.com/')
+    with req as response:
+        the_page = response.read()
+        data = the_page.encode('utf-8')
+    print(data)
+
+print(count_dots_on_i())
