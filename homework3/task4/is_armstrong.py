@@ -15,7 +15,10 @@ Write a function that detects if a number is Armstrong number in functionaly sty
 
 def is_armstrong(number: int) -> bool:
     digits = list(str(number))
-    if sum([int(i) ** len(digits) for i in digits]) == number:
+    len_of_digits = len(digits)
+    digits = map(int, digits)
+    # if sum(map(lambda x, y: x**y, digits, [len_of_digits]*len_of_digits)) == number:
+    if sum([i ** len_of_digits for i in digits]) == number:
         return True
     else:
         return False

@@ -19,7 +19,7 @@ import hashlib
 import random
 import struct
 import time
-from multiprocessing import Process
+from multiprocessing import Pool
 
 
 def slow_calculate(value):
@@ -30,11 +30,10 @@ def slow_calculate(value):
 
 
 def slow_sum():
-    jobs = []
-    for i in range(500):
-        p = Process(target=slow_calculate, args=(i,))
-        jobs.append(p)
-        p.start()
+    jobs = Pool(50)
+    jobs.map(slow_calculate, range(501))
+    jobs.close()
+    jobs.join()
 
 
 if __name__ == "__main__":

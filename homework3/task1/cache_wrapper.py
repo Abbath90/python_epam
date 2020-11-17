@@ -48,3 +48,4 @@ def cache(size_limit: int) -> Callable:
         return wrapped
 
     return wrapper
+
