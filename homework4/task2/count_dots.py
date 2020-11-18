@@ -14,18 +14,16 @@ You will learn:
  - how to write complex mocks
  - how to raise an exception form mocks
  - do a simple network requests
->>> count_dots_on_i("https://example.com/")
+#>>> count_dots_on_i("https://example.com/")
 59
 * https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen
 """
 import urllib.request
 
 
-def count_dots_on_i() -> int:
-    req = urllib.request.urlopen('https://www.google.com/')
-    with req as response:
-        the_page = response.read()
-        data = the_page.encode('utf-8')
-    print(data)
+def count_dots_on_i(link) -> int:
+    with urllib.request.urlopen(link) as response:
+        html = response.read()
+        return html
 
-print(count_dots_on_i())
+print(count_dots_on_i('http://ya.ru'))
