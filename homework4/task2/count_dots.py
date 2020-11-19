@@ -18,12 +18,16 @@ You will learn:
 59
 * https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen
 """
-import urllib.request
+import requests
 
 
-def count_dots_on_i(link) -> int:
-    with urllib.request.urlopen(link) as response:
-        html = response.read()
-        return html
+def count_dots_on_i(link: str) -> int:
+    try:
+        response = requests.get(link)
+    except requests.ConnectionError as ce:
+        print(ce)
+    else:
+        return response.text.count("i")
 
-print(count_dots_on_i('http://ya.ru'))
+
+
