@@ -22,3 +22,5 @@ def test_count_dots(requests_mock, data: str, expected_result: int):
     actual_result = count_dots_on_i('mock://test.com')
 
     assert actual_result == expected_result
+
+def test_count_dots_exception(data: str, )

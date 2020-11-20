@@ -25,7 +25,7 @@ def count_dots_on_i(link: str) -> int:
     try:
         response = requests.get(link)
     except requests.ConnectionError as ce:
-        print(ce)
+        raise ValueError("url is unmatchable")
     else:
         return response.text.count("i")
 
