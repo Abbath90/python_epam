@@ -17,7 +17,6 @@ def cache(func: Callable) -> Callable:
     input_cache = {}
 
     def cache_func(*args):
-        print(args)
         if args in input_cache:
             return input_cache[args]
         else:
