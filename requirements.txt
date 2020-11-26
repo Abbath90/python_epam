@@ -4,3 +4,5 @@ pytest-mock
 black
 isort
 pre-commit
+requests
+requests_mock
