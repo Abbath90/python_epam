@@ -35,7 +35,8 @@ PEP8 соблюдать строго.
 """
 import datetime
 
-class Homework():
+
+class Homework:
     def __init__(self, text: str, deadline: int):
         self.text = text
         self.deadline = datetime.timedelta(days=deadline)
@@ -44,7 +45,8 @@ class Homework():
     def is_active(self) -> bool:
         return datetime.datetime.today() < (self.created + self.deadline)
 
-class Student():
+
+class Student:
     def __init__(self, first_name: str, last_name: str):
         self.first_name = first_name
         self.last_name = last_name
@@ -53,15 +55,16 @@ class Student():
         if homework.is_active():
             return homework
         else:
-            print('You are late')
+            print("You are late")
             return None
 
-class Teacher():
+
+class Teacher:
     def __init__(self, first_name: str, last_name: str):
         self.first_name = first_name
         self.last_name = last_name
 
-    def create_homework(self, text_of_homework: str, days_for_homework: int) -> Homework:
+    def create_homework(
+        self, text_of_homework: str, days_for_homework: int
+    ) -> Homework:
         return Homework(text_of_homework, days_for_homework)
-
-
