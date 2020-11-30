@@ -8,22 +8,26 @@ reset_instances_counter - сбросить счетчик экземпляров
 Ниже пример использования
 """
 
-from functools import wraps
 
 def instances_counter(cls):
-    def dec(cls):
-        setattr(cls, 'c', 0)  # add atr counter to CLS
+    setattr(cls, 'counter', 0)
 
-        def __init__(self):
-            cls.c += 1  # +1 to CLS, not self!
+    def __init__(self):
+        cls.counter += 1
 
-        def get_c(self=None):
-            return cls.c  # get current value from CLS
+    def get_created_instances(self):
+        return cls.counter
 
-        setattr(cls, '__init__', __init__)  # add new __init__ IT WILL OVERWRITE original __init__
-        setattr(cls, 'get_c', get_c)  # add new method
-        return cls
+    def reset_created_instances(self):
+        last_value = cls.counter
+        cls.counter = 0
+        return last_value
 
+    setattr(cls, '__init__', __init__)
+    setattr(cls, 'get_created_instances', get_created_instances)
+    setattr(cls, 'reset_created_instances', reset_created_instances)
+
+    return cls
 
 
 @instances_counter
@@ -33,7 +37,8 @@ class User:
 
 if __name__ == '__main__':
 
-    User.get_created_instances()  # 0
+    print(User.get_created_instances(None))
     user, _, _ = User(), User(), User()
-    user.get_created_instances()  # 3
-    user.reset_instances_counter()  # 3
+    print(user.get_created_instances())
+    print(user.reset_created_instances())
+    print(user.get_created_instances())
