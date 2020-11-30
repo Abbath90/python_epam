@@ -10,7 +10,7 @@ reset_instances_counter - сбросить счетчик экземпляров
 
 
 def instances_counter(cls):
-    setattr(cls, 'counter', 0)
+    setattr(cls, "counter", 0)
 
     def __init__(self):
         cls.counter += 1
@@ -18,14 +18,14 @@ def instances_counter(cls):
     def get_created_instances(self):
         return cls.counter
 
-    def reset_created_instances(self):
+    def reset_instances_counter(self):
         last_value = cls.counter
         cls.counter = 0
         return last_value
 
-    setattr(cls, '__init__', __init__)
-    setattr(cls, 'get_created_instances', get_created_instances)
-    setattr(cls, 'reset_created_instances', reset_created_instances)
+    setattr(cls, "__init__", __init__)
+    setattr(cls, "get_created_instances", get_created_instances)
+    setattr(cls, "reset_instances_counter", reset_instances_counter)
 
     return cls
 
@@ -35,10 +35,10 @@ class User:
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     print(User.get_created_instances(None))
     user, _, _ = User(), User(), User()
     print(user.get_created_instances())
-    print(user.reset_created_instances())
+    print(user.reset_instances_counter())
     print(user.get_created_instances())

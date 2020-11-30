@@ -45,8 +45,10 @@ PEP8 соблюдать строго.
 import datetime
 from collections import defaultdict
 
+
 class DeadLineException(Exception):
     pass
+
 
 class Homework:
     def __init__(self, text: str, deadline: int):
@@ -56,7 +58,6 @@ class Homework:
 
     def is_active(self) -> bool:
         return datetime.datetime.today() < (self.created + self.deadline)
-
 
 
 class Person:
@@ -69,17 +70,22 @@ class Student(Person):
     def do_homework(self, homework: Homework, solution: str) -> Homework:
         if not homework.is_active():
             raise DeadLineException("You are late")
-        return HomeworkResult(self, homework, solution, created=datetime.datetime.today())
+        return HomeworkResult(
+            self, homework, solution, created=datetime.datetime.today()
+        )
 
 
 class HomeworkResult:
-    def __init__(self, author: Student, homework: Homework, solution: str, created: datetime):
+    def __init__(
+        self, author: Student, homework: Homework, solution: str, created: datetime
+    ):
         if not isinstance(homework, Homework):
             raise TypeError("You gave a not Homework object")
         self.author = author
         self.homework = homework
         self.solution = solution
         self.created = created
+
 
 class Teacher(Person):
     homework_done = defaultdict(list)
@@ -90,7 +96,7 @@ class Teacher(Person):
 
     @classmethod
     def check_homework(cls, homework_result: HomeworkResult):
-        if len(homework_result.solution) < 5 :
+        if len(homework_result.solution) < 5:
             return False
         if homework_result.solution not in cls.homework_done[homework_result.homework]:
             cls.homework_done[homework_result.homework].append(homework_result.solution)
@@ -103,23 +109,24 @@ class Teacher(Person):
         else:
             cls.homework_done.pop(homework)
 
-if __name__ == '__main__':
-    opp_teacher = Teacher('Daniil', 'Shadrin')
-    advanced_python_teacher = Teacher('Aleksandr', 'Smetanin')
 
-    lazy_student = Student('Roman', 'Petrov')
-    good_student = Student('Lev', 'Sokolov')
+if __name__ == "__main__":
+    opp_teacher = Teacher("Daniil", "Shadrin")
+    advanced_python_teacher = Teacher("Aleksandr", "Smetanin")
 
-    oop_hw = opp_teacher.create_homework('Learn OOP', 1)
-    docs_hw = opp_teacher.create_homework('Read docs', 5)
+    lazy_student = Student("Roman", "Petrov")
+    good_student = Student("Lev", "Sokolov")
 
-    result_1 = good_student.do_homework(oop_hw, 'I have done this hw')
-    result_2 = good_student.do_homework(docs_hw, 'I have done this hw too')
-    result_3 = lazy_student.do_homework(docs_hw, 'done')
+    oop_hw = opp_teacher.create_homework("Learn OOP", 1)
+    docs_hw = opp_teacher.create_homework("Read docs", 5)
+
+    result_1 = good_student.do_homework(oop_hw, "I have done this hw")
+    result_2 = good_student.do_homework(docs_hw, "I have done this hw too")
+    result_3 = lazy_student.do_homework(docs_hw, "done")
     try:
         result_4 = HomeworkResult(good_student, "fff", "Solution")
     except Exception:
-        print('There was an exception here')
+        print("There was an exception here")
     opp_teacher.check_homework(result_1)
     temp_1 = opp_teacher.homework_done
 
