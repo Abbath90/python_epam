@@ -59,7 +59,6 @@ class Homework:
 
 
 
-
 class Person:
     def __init__(self, first_name: str, last_name: str):
         self.first_name = first_name
@@ -70,23 +69,7 @@ class Student(Person):
     def do_homework(self, homework: Homework, solution: str) -> Homework:
         if not homework.is_active():
             raise DeadLineException("You are late")
-        return HomeworkResult(self, homework, solution, created=datetime.now())
-
-
-class Teacher(Person):
-    homework_done = defaultdict(set)
-
-    @staticmethod
-    def create_homework(self, text_of_homework: str, days_for_homework: int) -> Homework:
-        return Homework(text_of_homework, days_for_homework)
-
-    @classmethod
-    def reset_results(cls, homework=None):
-        if homework is None:
-            cls.homework_done.clear()
-        else:
-            cls.homework_done.pop(homework)
-
+        return HomeworkResult(self, homework, solution, created=datetime.datetime.today())
 
 
 class HomeworkResult:
@@ -97,6 +80,28 @@ class HomeworkResult:
         self.homework = homework
         self.solution = solution
         self.created = created
+
+class Teacher(Person):
+    homework_done = defaultdict(list)
+
+    @staticmethod
+    def create_homework(text_of_homework: str, days_for_homework: int) -> Homework:
+        return Homework(text_of_homework, days_for_homework)
+
+    @classmethod
+    def check_homework(cls, homework_result: HomeworkResult):
+        if len(homework_result.solution) < 5 :
+            return False
+        if homework_result.solution not in cls.homework_done[homework_result.homework]:
+            cls.homework_done[homework_result.homework].append(homework_result.solution)
+        return True
+
+    @classmethod
+    def reset_results(cls, homework: Homework = None):
+        if homework is None:
+            cls.homework_done.clear()
+        else:
+            cls.homework_done.pop(homework)
 
 if __name__ == '__main__':
     opp_teacher = Teacher('Daniil', 'Shadrin')
