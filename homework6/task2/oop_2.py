@@ -96,11 +96,10 @@ class Teacher(Person):
 
     @classmethod
     def check_homework(cls, homework_result: HomeworkResult):
-        if len(homework_result.solution) < 5:
-            return False
-        if homework_result.solution not in cls.homework_done[homework_result.homework]:
+        if len(homework_result.solution) > 5:
             cls.homework_done[homework_result.homework].append(homework_result.solution)
-        return True
+            return True
+        return False
 
     @classmethod
     def reset_results(cls, homework: Homework = None):
