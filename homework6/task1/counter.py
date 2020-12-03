@@ -31,9 +31,3 @@ def instances_counter(cls):
     setattr(cls, "reset_instances_counter", reset_instances_counter)
 
     return cls
-
-
-@instances_counter
-class User:
-    pass
-
