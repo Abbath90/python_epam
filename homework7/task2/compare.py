@@ -15,5 +15,14 @@ Examples:
 """
 
 
-def backspace_compare(first: str, second: str):
-    ...
+def backspace_compare(first: str, second: str) -> bool:
+    def check_string(string):
+        answer = ""
+        for i in list(string):
+            if i != "#":
+                answer += i
+            else:
+                answer = answer[:-1]
+        return answer
+
+    return check_string(first) == check_string(second)
