@@ -53,3 +53,65 @@ Avoid reading entire table into memory. When iterating through records,
 start reading the first record, then go to the next one, until records are exhausted.
 When writing tests, it's not always neccessary to mock database calls completely.
 Use supplied example.sqlite file as database fixture file."""
+
+import sqlite3
+
+class TableData:
+    def __init__(self, database_name, table_name):
+        self.open_db(database_name)
+        db_data = self.get_table(table_name)
+        tabledata_dict = self.form_tabledata_dict(db_data)
+        for name in tabledata_dict:
+            setattr(self, name, tabledata_dict[name])
+
+
+    def open_db(self, name):
+        try:
+            self.conn = sqlite3.connect(name);
+            self.cursor = self.conn.cursor()
+
+        except sqlite3.Error as e:
+            print("Error connecting to database!")
+
+    def get_table(self, table, columns = '*', limit=None):
+        query = f"SELECT {columns} from {table};"
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+
+        return rows[len(rows)-limit if limit else 0:]
+
+    def form_tabledata_dict(self, db_data):
+        return {dataset[0]: [dataset[1], dataset[2]] for dataset in db_data}
+
+
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __contains__(self, key):
+        return key in self.__dict__
+
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
+    def __setitem__(self, key, value):
+        if isinstance(key, (int, float)) or key.isdigit():
+            raise ValueError("Invalid key")
+        else:
+            self.__dict__[key] = value
+
+    def __delitem__(self, key):
+        del self.__dict__[key]
+
+
+if __name__ == "__main__":
+    q = TableData('example.sqlite', 'presidents')
+    print(q.__dict__)
+    print(q['Yeltsin'])
+    print('Yeltsin' in q)
+    for president in q:
+        print(president)
+    #Табличная структура???
