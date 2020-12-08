@@ -56,62 +56,76 @@ Use supplied example.sqlite file as database fixture file."""
 
 import sqlite3
 
-class TableData:
-    def __init__(self, database_name, table_name):
-        self.open_db(database_name)
-        db_data = self.get_table(table_name)
-        tabledata_dict = self.form_tabledata_dict(db_data)
-        for name in tabledata_dict:
-            setattr(self, name, tabledata_dict[name])
-
-
-    def open_db(self, name):
+"""def db_connector(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        object = args[0]
         try:
-            self.conn = sqlite3.connect(name);
-            self.cursor = self.conn.cursor()
-
-        except sqlite3.Error as e:
+            connection = sqlite3.connect(object.database_name)
+            object.cursor = connection.cursor()
+            return_val = f(*args, **kwargs)
+        except sqlite3.Error:
             print("Error connecting to database!")
-
-    def get_table(self, table, columns = '*', limit=None):
-        query = f"SELECT {columns} from {table};"
-        self.cursor.execute(query)
-        rows = self.cursor.fetchall()
-
-        return rows[len(rows)-limit if limit else 0:]
-
-    def form_tabledata_dict(self, db_data):
-        return {dataset[0]: [dataset[1], dataset[2]] for dataset in db_data}
+        finally:
+            connection.close()
+        return return_val
+    return wrapper
+"""
 
 
+class TableData:
+    def __init__(self, database_name: str, table_name: str):
+        self.database_name = database_name
+        self.table_name = table_name
+        self.connection = sqlite3.connect(database_name)
+        self.connection.row_factory = sqlite3.Row
+        self.cursor = self.connection.cursor()
+        # self.columns_names = self._get_columns_names()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, ext_type, exc_value, traceback):
+        self.cursor.close()
+        if isinstance(exc_value, Exception):
+            self.connection.rollback()
+        else:
+            self.connection.commit()
+        self.connection.close()
+
+    def __getitem__(self, item):
+        result = self.cursor.execute(
+            f"SELECT * FROM {self.table_name} WHERE name=:name", {"name": item}
+        ).fetchone()
+        return tuple(result)
 
     def __len__(self):
-        return len(self.__dict__)
-
-    def __iter__(self):
-        return iter(self.__dict__)
+        result = self.cursor.execute(
+            f"SELECT COUNT(*) FROM {self.table_name}"
+        ).fetchone()[0]
+        return result
 
     def __contains__(self, key):
-        return key in self.__dict__
+        result = self.cursor.execute(
+            f"SELECT * FROM {self.table_name} WHERE name=:name", {"name": key}
+        ).fetchone()
+        return key in result
 
-    def __getitem__(self, key):
-        return self.__dict__[key]
+    """def _get_columns_names(self):
+        self.cursor.execute(f"SELECT * FROM {self.table_name}")
+        names = [description[0] for description in self.cursor.description]
+        return names"""
 
-    def __setitem__(self, key, value):
-        if isinstance(key, (int, float)) or key.isdigit():
-            raise ValueError("Invalid key")
-        else:
-            self.__dict__[key] = value
-
-    def __delitem__(self, key):
-        del self.__dict__[key]
+    def __iter__(self):
+        self.cursor.execute(f"SELECT * FROM {self.table_name}")
+        return self.cursor
 
 
 if __name__ == "__main__":
-    q = TableData('example.sqlite', 'presidents')
-    print(q.__dict__)
-    print(q['Yeltsin'])
-    print('Yeltsin' in q)
-    for president in q:
-        print(president)
-    #Табличная структура???
+    with TableData("example.sqlite", "presidents") as q:
+        print(q.__dict__)
+        print(len(q))
+        print(q["Yeltsin"])
+        print("Yeltsin" in q)
+        for president in q:
+            print(president["name"])
