@@ -53,20 +53,3 @@ class KeyStorage:
 
     def __delitem__(self, key):
         del self.__dict__[key]
-
-
-if __name__ == "__main__":
-    obj = KeyStorage("task1.txt")
-    print(
-        obj.__dict__
-    )  # {'name': 'kek', 'last_name': 'top', 'power': 9001, 'song': 'shadilay'}
-    for i in obj:
-        print(i, end=" ")  # name last_name power song
-    print(end="\n")
-    obj.atr1 = "qwerty"
-    print(obj.atr1)  # qwerty
-    obj["atr2"] = 666
-    print("atr2" in obj)  # True
-    print(len(obj))  # 6
-
-    obj[1] = "qaz"  # ValueError
