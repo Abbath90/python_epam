@@ -5,37 +5,26 @@ import pytest
 from homework8.task2.president_db import TableData
 
 
-def test_get_length():
+@pytest.fixture(scope="module")
+def setup_database():
     with TableData(
         "./homework8/tests/test_stuff/example.sqlite", "presidents"
     ) as president:
-        assert len(president) == 3
+        yield president
 
 
-def test_get_row():
-    with TableData(
-        "./homework8/tests/test_stuff/example.sqlite", "presidents"
-    ) as president:
-        assert president["Yeltsin"] == ("Yeltsin", 999, "Russia")
+def test_get_length(setup_database):
+
+    assert len(setup_database) == 3
 
 
-def test_contains():
-    with TableData(
-        "./homework8/tests/test_stuff/example.sqlite", "presidents"
-    ) as president:
-        assert "Yeltsin" in president
+def test_get_row(setup_database):
+    assert setup_database["Yeltsin"] == ("Yeltsin", 999, "Russia")
 
 
-def test_iterable():
-    with TableData(
-        "./homework8/tests/test_stuff/example.sqlite", "presidents"
-    ) as president:
-        assert [i["name"] for i in president] == ["Yeltsin", "Trump", "Big Man Tyrone"]
+def test_contains(setup_database):
+    assert "Yeltsin" in setup_database
 
 
-"""def test_test():
-    with TableData('./homework8/tests/test_stuff/example.sqlite', "presidents") as president:
-        assert len(president) == 3
-        assert president["Yeltsin"] == ('Yeltsin', 999, 'Russia')
-        assert "Yeltsin" in president
-        assert [i["name"] for i in president] == ["Yeltsin", "Trump", "Big Man Tyrone"]"""
+def test_iterable(setup_database):
+    assert [i["name"] for i in setup_database] == ["Yeltsin", "Trump", "Big Man Tyrone"]
