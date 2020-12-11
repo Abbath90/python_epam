@@ -111,7 +111,9 @@ def test_reset_the_result(instance_creation_teacher, instance_creation_student):
     assert instance_creation_teacher.homework_done == {homework2: ["solution"]}
 
 
-def test_homework_done_dict_contains_unique(instance_creation_teacher, instance_creation_student):
+def test_homework_done_dict_contains_unique(
+    instance_creation_teacher, instance_creation_student
+):
     homework = instance_creation_teacher.create_homework("Read docs", 1)
     homework_result = HomeworkResult(
         instance_creation_student, homework, "I have done this hw", 1
@@ -122,6 +124,3 @@ def test_homework_done_dict_contains_unique(instance_creation_teacher, instance_
     new_teacher.check_homework(homework_result)
 
     assert instance_creation_teacher.homework_done == new_teacher.homework_done
-
-
-
