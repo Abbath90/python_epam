@@ -18,7 +18,7 @@ Examples:
 def backspace_compare(first: str, second: str) -> bool:
     def check_string(string):
         answer = ""
-        for i in list(string):
+        for i in string:
             if i != "#":
                 answer += i
             else:
