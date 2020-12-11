@@ -12,6 +12,7 @@ def test_get_created_instances():
     user, _, _ = User(), User(), User()
     assert user.get_created_instances() == 3
     user.reset_instances_counter()
+    assert user.get_created_instances() == 0
 
 
 def test_reset_instances_counter():
