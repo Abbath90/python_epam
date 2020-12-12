@@ -90,7 +90,6 @@ class TableData:
         else:
             self.connection.commit()
         self.connection.close()
-        self.state = "closed"
 
     @is_context_manager
     def __getitem__(self, item):
