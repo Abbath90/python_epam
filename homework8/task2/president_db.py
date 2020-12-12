@@ -56,33 +56,31 @@ Use supplied example.sqlite file as database fixture file."""
 
 import sqlite3
 
-"""def db_connector(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        object = args[0]
-        try:
-            connection = sqlite3.connect(object.database_name)
-            object.cursor = connection.cursor()
-            return_val = f(*args, **kwargs)
-        except sqlite3.Error:
-            print("Error connecting to database!")
-        finally:
-            connection.close()
-        return return_val
-    return wrapper
-"""
+
+class ContextManagerException(Exception):
+    pass
 
 
 class TableData:
+    def is_context_manager(func):
+        def inner_function(self, *args, **kwargs):
+            if not self.__is_context_manager:
+                raise ContextManagerException("Not a context manager")
+
+            return func(self, *args, **kwargs)
+
+        return inner_function
+
     def __init__(self, database_name: str, table_name: str):
         self.database_name = database_name
         self.table_name = table_name
-        self.connection = sqlite3.connect(database_name)
-        self.connection.row_factory = sqlite3.Row
-        self.cursor = self.connection.cursor()
-        # self.columns_names = self._get_columns_names()
+        self.__is_context_manager = False
 
     def __enter__(self):
+        self.connection = sqlite3.connect(self.database_name)
+        self.connection.row_factory = sqlite3.Row
+        self.cursor = self.connection.cursor()
+        self.__is_context_manager = True
         return self
 
     def __exit__(self, ext_type, exc_value, traceback):
@@ -92,40 +90,30 @@ class TableData:
         else:
             self.connection.commit()
         self.connection.close()
+        self.state = "closed"
 
+    @is_context_manager
     def __getitem__(self, item):
         result = self.cursor.execute(
             f"SELECT * FROM {self.table_name} WHERE name=:name", {"name": item}
         ).fetchone()
         return tuple(result)
 
+    @is_context_manager
     def __len__(self):
         result = self.cursor.execute(
             f"SELECT COUNT(*) FROM {self.table_name}"
         ).fetchone()[0]
         return result
 
+    @is_context_manager
     def __contains__(self, key):
         result = self.cursor.execute(
             f"SELECT * FROM {self.table_name} WHERE name=:name", {"name": key}
         ).fetchone()
         return key in result
 
-    """def _get_columns_names(self):
-        self.cursor.execute(f"SELECT * FROM {self.table_name}")
-        names = [description[0] for description in self.cursor.description]
-        return names"""
-
+    @is_context_manager
     def __iter__(self):
         self.cursor.execute(f"SELECT * FROM {self.table_name}")
         return self.cursor
-
-
-if __name__ == "__main__":
-    with TableData("example.sqlite", "presidents") as q:
-        print(q.__dict__)
-        print(len(q))
-        print(q["Yeltsin"])
-        print("Yeltsin" in q)
-        for president in q:
-            print(president["name"])
