@@ -15,7 +15,6 @@ def test_teacher_init():
     assert teacher.last_name == "Shadrin"
 
 
-
 def test_homework_init():
     homework = Homework("Learn functions", 0)
 

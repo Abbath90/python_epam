@@ -12,9 +12,9 @@ file2.txt:
 [1, 2, 3, 4, 5, 6]
 """
 from pathlib import Path
-from typing import List, Union, Iterator
+from typing import Iterator, List, Union
 
-#def merge_sorted_files(file_list: List[Union[Path, str], ...]) -> Iterator:
+
 def merge_sorted_files(file_list: List[Union[Path, str]]) -> Iterator:
     list_of_numbers = []
     for file in file_list:
@@ -22,13 +22,4 @@ def merge_sorted_files(file_list: List[Union[Path, str]]) -> Iterator:
             for line in file_object.readlines():
                 list_of_numbers.append(int(line))
 
-    return(iter(sorted(list_of_numbers)))
-
-it = merge_sorted_files(['1.txt', '2.txt'])
-print(next(it))
-print(next(it))
-print(next(it))
-print(next(it))
-print(next(it))
-print(next(it))
-print(next(it))
+    return iter(sorted(list_of_numbers))
