@@ -22,13 +22,14 @@ assert ColorsEnum.RED == "RED"
 assert SizesEnum.XL == "XL"
 """
 
-from enum import EnumMeta, Enum
+from enum import Enum, EnumMeta
+
 
 class SimplifiedEnum(type):
     def __new__(cls, name, bases, class_dict):
         class_instance = super().__new__(cls, name, bases, class_dict)
         for class_dict_key in class_dict.keys():
-            if hasattr(class_dict[class_dict_key], '__iter__'):
+            if hasattr(class_dict[class_dict_key], "__iter__"):
                 cls.key_attr_name = class_dict_key
         setattr(class_instance, cls.key_attr_name, class_dict[cls.key_attr_name])
 
@@ -44,4 +45,3 @@ class SimplifiedEnum(type):
 
     def __len__(cls):
         return len(cls.__dict__[cls.key_attr_name])
-
