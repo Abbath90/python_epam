@@ -12,7 +12,7 @@ class ContextManagerException(Exception):
     pass
 
 
-class Suppressor_as_class:
+class SuppressorAsClass:
     def __init__(self, *exceptions):
         self._exceptions = exceptions
 

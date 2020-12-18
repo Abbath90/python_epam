@@ -14,10 +14,10 @@ from pathlib import Path
 from typing import Callable, Optional, TextIO
 
 
-def tokenizer_generator(file_handler: TextIO, tok: Optional[Callable]):
+def tokenizer_generator(file_handler: TextIO, tok: Optional[Callable]) -> int:
     buffer = ""
     char = " "
-    while char:
+    while True:
         char = file_handler.read(1)
         if not char:
             yield 1  # buffer
@@ -42,7 +42,6 @@ def universal_file_counter(
                     counter += token
             else:
                 for _ in f:
-                    print(_)
                     counter += 1
 
     return counter
