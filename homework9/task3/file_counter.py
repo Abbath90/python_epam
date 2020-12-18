@@ -41,7 +41,6 @@ def universal_file_counter(
                 for token in tokenizer_generator(f, tokenizer):
                     counter += token
             else:
-                for _ in f:
-                    counter += 1
+                counter += sum(1 for _ in f)
 
     return counter

@@ -16,7 +16,7 @@ def test_file_counter_without_tokenizer(tmpdir):
     tmpdir.join("file1.txt").write(content1)
     tmpdir.join("file2.txt").write(content2)
     tmpdir.join("file3.file").write(content3)
-    actual_result = universal_file_counter(Path(tmpdir), "txt")
+    actual_result = universal_file_counter(Path(tmpdir), "txt", None)
     assert actual_result == 6
 
 
