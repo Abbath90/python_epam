@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Callable, Optional, TextIO
 
 
-def tokenizer_generator(file_handler: TextIO, tok: Optional[Callable]) -> int:
+def tokenizer_generator(file_handler: TextIO, tok: Optional[Callable]) -> Generator[int, None, None]:
     buffer = ""
     char = " "
     while True:
