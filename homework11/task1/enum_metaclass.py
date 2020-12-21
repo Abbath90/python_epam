@@ -26,7 +26,7 @@ from enum import Enum, EnumMeta
 
 
 class SimplifiedEnum(type):
-    def __new__(cls, name, bases, class_dict):
+    def __new__(cls, name, bases, class_dict) -> Any:
         class_instance = super().__new__(cls, name, bases, class_dict)
         for class_dict_key in class_dict.keys():
             if hasattr(class_dict[class_dict_key], "__iter__"):
@@ -35,7 +35,7 @@ class SimplifiedEnum(type):
 
         return class_instance
 
-    def __getattr__(cls, key):
+    def __getattr__(cls, key) -> str:
         if key in cls.__dict__[cls.key_attr_name]:
             return key
         raise AttributeError(key)
