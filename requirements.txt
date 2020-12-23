@@ -6,3 +6,4 @@ isort
 pre-commit
 requests
 requests_mock
+django
