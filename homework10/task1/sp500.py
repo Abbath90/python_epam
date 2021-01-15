@@ -9,23 +9,6 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def timeit(func):
-    """
-    Decorator for measuring function's running time.
-    """
-
-    def measure_time(*args, **kw):
-        start_time = time.time()
-        result = func(*args, **kw)
-        print(
-            "Processing time of %s(): %.2f seconds."
-            % (func.__qualname__, time.time() - start_time)
-        )
-        return result
-
-    return measure_time
-
-
 def get_dollar_rate(link: str) -> float:
     response = requests.get(link)
     soup = (
@@ -36,7 +19,18 @@ def get_dollar_rate(link: str) -> float:
 
 
 def create_page_list(urlbase: str) -> List[str]:
-    return [urlbase + "/index/components/s&p_500?p=" + str(i) for i in range(1, 3)]
+    counter = 1
+    links = []
+    while True:
+        link = f"{urlbase}/index/components/s&p_500?p={counter}"
+        try:
+            pd.read_html(link)
+        except ValueError:
+            break
+        links.append(link)
+        counter += 1
+
+    return links
 
 
 def get_p_e(soup: BeautifulSoup) -> float:
@@ -122,7 +116,6 @@ def create_jsons(sp500_df: pd.DataFrame) -> None:
     ).to_json("top10_profit", orient="index")
 
 
-@timeit
 def sp500_main() -> None:
     urlbase = "https://markets.businessinsider.com"
     urls = create_page_list(urlbase)
@@ -130,11 +123,8 @@ def sp500_main() -> None:
     tables = asyncio.get_event_loop().run_until_complete(
         get_all_tables(urls, dollar_rate, urlbase)
     )
-    # tables = asyncio.run(get_all_tables(urls, dollar_rate, urlbase))
     sp500_df = pd.concat(tables, ignore_index=True)
     sp500_df["growth"] = sp500_df["1 Year +/- %"].str.split(" ", 1, expand=True)[0]
     sp500_df = sp500_df[["code", "Name", "price", "p_e", "growth", "profit %"]]
     create_jsons(sp500_df)
 
-
-sp500_main()
