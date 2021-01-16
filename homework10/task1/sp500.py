@@ -127,4 +127,3 @@ def sp500_main() -> None:
     sp500_df["growth"] = sp500_df["1 Year +/- %"].str.split(" ", 1, expand=True)[0]
     sp500_df = sp500_df[["code", "Name", "price", "p_e", "growth", "profit %"]]
     create_jsons(sp500_df)
-
