@@ -6,3 +6,13 @@ isort
 pre-commit
 requests
 requests_mock
+pandas
+aiohttp
+bs4
+numpy==1.19.3
+lxml
+html5lib
+pytest-asyncio
+anyio
+pytest-trio
+aioresponses
