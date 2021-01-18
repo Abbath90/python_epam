@@ -103,17 +103,17 @@ async def get_all_tables(urls: List[str], dollar_rate: float, urlbase: str) -> A
 
 def create_jsons(sp500_df: pd.DataFrame) -> None:
     sp500_df.set_index("code").sort_values(["price"], ascending=False).head(10).to_json(
-        "top10_price", orient="index"
+        "top10_price.json", orient="index"
     )
     sp500_df.set_index("code").sort_values(["p_e"], ascending=True).head(10).to_json(
-        "top10_pe", orient="index"
+        "top10_pe.json", orient="index"
     )
     sp500_df.set_index("code").sort_values(["growth"], ascending=False).head(
         10
-    ).to_json("top10_growth", orient="index")
+    ).to_json("top10_growth.json", orient="index")
     sp500_df.set_index("code").sort_values(["profit %"], ascending=False).head(
         10
-    ).to_json("top10_profit", orient="index")
+    ).to_json("top10_profit.json", orient="index")
 
 
 def sp500_main() -> None:
