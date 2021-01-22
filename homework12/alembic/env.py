@@ -13,11 +13,16 @@ config = context.config
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 
+import sys, os
+sys.path = ['', '..'] + sys.path[1:]
+
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+
+from homework12.models import Base
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
